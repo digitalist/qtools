@@ -1,5 +1,6 @@
 # qtools
-A pack of tools for working with flash memory  of modems on a Qualcom chipset
+Tools for working with flash memory  of modems on a Qualcom chipset
+
 It contains utilities and some patched firmware loaders
 
 `qcommand` - an interactive shell for entering commands via command port, replaces horribly unusable `revskills`
