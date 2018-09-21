@@ -113,7 +113,7 @@ if (prefixflag) { // вставляем префикс, если надо
 	outlen+=1;
 } 
 
-if (write(siofd,outcmdbuf,outlen) == 0) {   printf("\n Ошибка записи команды");return 0;  }
+if (write(siofd,outcmdbuf,outlen) == 0) {   printf("\n Command writing error");return 0;  }
 #ifndef WIN32
 tcdrain(siofd);  // ждем окончания вывода блока
 #else
@@ -370,7 +370,7 @@ void reopen_port() {
 close_port();
 usleep(1000);
 if (!open_port(pdev)) {
-  printf("\n Ошибка открытия порта %s",pdev);
+  printf("\n Error opening port %s",pdev);
   exit(1);
 } 
 }
@@ -412,7 +412,7 @@ char iobuf[2048];
 int iolen,i;
   
 if (len == 0) return;
-printf("\n! %s вернул ошибку: ",descr);  
+printf("\n! %s returned an error: ",descr);
 if (pktbuf[1] == 0x0e) {
   // текстовый отлуп - печатаем его
   pktbuf[len-4]=0;
@@ -420,7 +420,7 @@ if (pktbuf[1] == 0x0e) {
   iolen=receive_reply(iobuf,0);
   if (iolen != 0) {
       i=*((unsigned int*)&iobuf[2]);
-      printf("Код ошибки = %08x\n\n",i);
+      printf("Error code = %08x\n\n",i);
   }
 }
 else {

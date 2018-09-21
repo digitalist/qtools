@@ -83,7 +83,7 @@ for(i=0;i<len;i+=1000)  {
   else break; // нормальный ответ - заканчиваем с этим блоком данных
  }
  if (tries == 0) { 
-    printf("\n Ошибка обработки команды чтения памяти, требуется %i байт, получено %i adr=%08x\n",blklen,iolen,adr);
+    printf("\n Error processing memory reading command, needed %i bytes, got %i adr=%08x\n",blklen,iolen,adr);
     memset(membuf+i,0xeb,blklen);
     errcount++;
  }   

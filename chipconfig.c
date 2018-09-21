@@ -92,7 +92,7 @@ char vval[100];
 
 FILE* in=fopen("chipset.cfg","r");  
 if (in == 0) {
-  printf("\n! Файл конфигурации чипсетов chipset.cfg не найден\n");
+  printf("\n! Config file chipset.cfg not found\n");
   return 0;  // конфиг не найден
 }
 
@@ -109,7 +109,7 @@ while(fgets(line,300,in) != 0) {
 //     printf("\n@@ описатель чипсета:");
    tok2=strchr(tok1,']');
    if (tok2 == 0) {
-      printf("\n! Файл конфигурации содержит ошибку в заголовке чипсета\n %s\n",line);
+      printf("\n! Config file contains an error in a chipset header\n %s\n",line);
       return 0;
     }   
     tok2[0]=0;
@@ -129,7 +129,7 @@ while(fgets(line,300,in) != 0) {
   }
 
   if (maxchip == -1) {
-      printf("\n! Файл конфигурации содержит строки вне секции описания чипсетов\n");
+      printf("\n! Config file contains lines outside of chipset description section\n");
       return 0;
   }   
   
@@ -144,7 +144,7 @@ while(fgets(line,300,in) != 0) {
   
   tok1+=index; 
   if (strchr(tok1,'=') == 0) {
-     printf("\n! Файл конфигурации: нет значения переменной\n%s\n",line);
+     printf("\n! Config file: undefined variable\n%s\n",line);
      return 0;
   }
   tok1+=strspn(tok1,"= "); // пропускаем разделитель
@@ -158,7 +158,7 @@ while(fgets(line,300,in) != 0) {
   if (strcmp(vname,"id") == 0) {
      chipset[maxchip].id=atoi(vval);         // код (id) чипcета 0 - несуществующий чипсет
      if (chipset[maxchip].id == 0) {
-      printf("\n! Файл конфигурации: id=0 недопустимо\n%s\n",line);
+      printf("\n! Config file: id=0 is forbidden\n%s\n",line);
       return 0;
      }
      continue;
@@ -208,13 +208,13 @@ while(fgets(line,300,in) != 0) {
   }
   
   // остальные имена
-  printf("\n! Файл конфигурации: недопустимое имя переменной\n%s\n",line);
+  printf("\n! Config file: wrong variable name\n%s\n",line);
   return 0;
 
 } 
 fclose(in);
 if (maxchip == -1) {
-  printf("\n! Файл конфигурации не содержит ни одного описателя чипсетов\n");
+  printf("\n! Config file has no chipset descriptions\n");
   return 0;
 }  
 maxchip++;
@@ -245,7 +245,7 @@ return -1;
 void list_chipset() {
   
 int i,j;
-printf("\n Код     Имя    Адрес NAND   Тип  udflag  MSM_ID\n---------------------------------------------------------------------");
+printf("\n Code     Name    Adress NAND   Type  udflag  MSM_ID\n---------------------------------------------------------------------");
 for(i=0;i<maxchip;i++) {
 //  if (i == 0)  printf("\n  0 (по умолчанию) автоопределение чипсета");
   printf("\n %2i  %9.9s    %08x    %1i     %1i    ",chipset[i].id,chipset[i].name,
@@ -295,7 +295,7 @@ for(i=0;i<maxchip ;i++)
   if (chipset[i].id == c) chip_type=i;
 
 if (chip_type == -1) {
-  printf("\n - Неверный код чипсета - %i",chip_type);
+  printf("\n - Bad chipset code - %i",chip_type);
   exit(1);
 }
 // устанавливаем адреса регистров чипсета

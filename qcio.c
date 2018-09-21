@@ -158,10 +158,10 @@ if (mode == 0) {
 
 i=send_cmd(hellocmd,strlen(hellocmd),rbuf);
 if (rbuf[1] != 2) {
-   printf(" Отсылка hello...");
+   printf(" Sending hello...");
    i=send_cmd(hellocmd,strlen(hellocmd),rbuf);
    if (rbuf[1] != 2) {
-     printf(" повторный hello возвратил ошибку!\n");
+     printf(" Repeating hello returned an error!\n");
      dump(rbuf,i,0);
      return;
    }  
@@ -171,12 +171,12 @@ i=rbuf[0x2c];
 rbuf[0x2d+i]=0;
 if (mode == 2) {
    // тихий запуск - обходим настройку чипсета
-   printf("Hello ok, флеш-память: %s\n",rbuf+0x2d);
+   printf("Hello ok, flash-memory: %s\n",rbuf+0x2d);
    return; 
  }  
 ttyflush(); 
 if (!test_loader()) {
-  printf("\n Используется непатченный загрузчик - продолжение работы невозможно\n");
+  printf("\n Unpatched loader is in use - can't run\n");
   exit(1);
 }  
 
@@ -184,21 +184,21 @@ if (get_sahara()) disable_bam(); // отключаем NANDc BAM, если ра�
 
 get_flash_config();
 cfg0=mempeek(nand_cfg0);
-printf("\n Версия HELLO-протокола: %i",rbuf[0x22]); 
-printf("\n Чипсет: %s",get_chipname()); 
-printf("\n Базовый адрес NAND-контроллера: %08x",nand_cmd);
-printf("\n Флеш-память: %s %s, %s",flash_mfr,(rbuf[0x2d] != 0x65)?((char*)(rbuf+0x2d)):"",flash_descr);
+printf("\n HELLO-protocol version: %i",rbuf[0x22]);
+printf("\n Chipset: %s",get_chipname());
+printf("\n NAND-controller base address: %08x",nand_cmd);
+printf("\n Flash memory: %s %s, %s",flash_mfr,(rbuf[0x2d] != 0x65)?((char*)(rbuf+0x2d)):"",flash_descr);
 //printf("\n Максимальный размер пакета: %i байта",*((unsigned int*)&rbuf[0x24]));
-printf("\n Размер сектора: %u байт",(cfg0&(0x3ff<<9))>>9);
-printf("\n Размер страницы: %u байт (%u секторов)",pagesize,spp);
-printf("\n Число страниц в блоке: %u",ppb);
-printf("\n Размер OOB: %u байт",oobsize); 
+printf("\n Sector size: %u bytes",(cfg0&(0x3ff<<9))>>9);
+printf("\n Page size: %u bytes (%u секторов)",pagesize,spp);
+printf("\n Number of pages in block: %u",ppb);
+printf("\n OOB size: %u bytes",oobsize);
 printf("\n Тип ECC: %s, %i бит",bch_mode?"BCH":"R-S",ecc_bit);
-printf("\n Размер ЕСС: %u байт",ecc_size);
-printf("\n Размер spare: %u байт",(cfg0>>23)&0xf);
-printf("\n Положение маркера дефектных блоков: ");
+printf("\n EСС size: %u bytes",ecc_size);
+printf("\n Spare size: %u bytes",(cfg0>>23)&0xf);
+printf("\n Bad blocks marker location: ");
 printf("%s+%x",badplace?"spare":"user",badposition);
-printf("\n Общий размер флеш-памяти = %u блоков (%i MB)",maxblock,maxblock*ppb/1024*pagesize/1024);
+printf("\n Total flash size = %u blocks (%i MB)",maxblock,maxblock*ppb/1024*pagesize/1024);
 printf("\n");
 }
 
@@ -367,7 +367,7 @@ if (nand_ids[i].id == fid) {
 i++;
 }  
 if (chipsize == 0) {
-	printf("\n Неопределенный Flash ID = %02x",fid);
+	printf("\n Undefined Flash ID = %02x",fid);
 }  
 
 // Вынимаем параметры конфигурации
@@ -411,12 +411,12 @@ if (bch_mode && (ecc_bit == 8)) linuxcwsize=532;
 
 c_badmark_pos = (pagesize-(linuxcwsize*(spp-1))+1);
 if (badposition == 0) {
-  printf("\n! Внимание - положение маркера дефектных блоков автоопределено!\n");  
+  printf("\n! Warning - autodotecting bad blocks marker!\n");
   badplace=0;
   badposition=c_badmark_pos;
 }  
 if (badposition != c_badmark_pos) {
-  printf("\n! Внимание - текущее положение маркера дефектных блоков %x не совпадает с расчетным %x!\n",
+  printf("\n! Wrtning - current bad blocks marker location %x differs from predicted %x!\n",
      badposition,c_badmark_pos);  
 }
 
